@@ -4,7 +4,7 @@ MyPythonLibraries
 
 This git contains a series of useful libraries for Python (v. 3.4.1)
 
-Libs Inclueded
+Libs Included
 --------------
 1. **libList**, which contains :
  - <code>randomList(n, minNum, maxNum)</code> to generate a list of random numbers 
