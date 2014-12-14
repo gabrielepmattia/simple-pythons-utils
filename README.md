@@ -14,6 +14,6 @@ Libs Included
  - <code>emptyFile(name)</code> to empty a file (<code>name = "example.txt"</code>)
 
  
-Programs Inclueded
+Programs Included
 ------------------
 1. **floating_point**, which allows you to convert decimal numbers in binary16, 32, 64 and 128 or with your desired exponent number and mantissa numbers (Run program from IDLE)
