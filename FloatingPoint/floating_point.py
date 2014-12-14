@@ -62,7 +62,18 @@ def ieeeConvert(n, nCifreExp, nCifreMantissa) :
 
     ## ESPONENTE
     # Trovo l'esponente
-    exp = len(parteInteraBin) -1
+    # Se la parte intera esiste conto le sue cifre per trovare l'esponente
+    if parteInteraBin != 0 :
+        exp = len(parteInteraBin) -1
+    else :
+    # Conto gli zeri da togliere
+        i = 0
+        nZeri = 1
+        while partedecimale[i] != 1 :
+            nZeri += 1
+            i += 1
+            
+        exp = nZeri * (-1)
 
     # Calcolo l'eccesso
     exx = 2**(nCifreExp -1) -1
@@ -73,6 +84,10 @@ def ieeeConvert(n, nCifreExp, nCifreMantissa) :
     # Converto in binario
     exp = str(bin(exp))[2:]
 
+    # Vedo se le cifre collimano altrimenti aggiungo zeri
+    if len(exp) < nCifreExp :
+        exp += "0" * (nCifreExp - len(exp))
+    
 
     if float(n) < 0 :
         segno = "1"
@@ -83,7 +98,13 @@ def ieeeConvert(n, nCifreExp, nCifreMantissa) :
     print(segno + " | " + exp + " | " + mantissa[1:], "\n")
 
     nFinale = segno + exp + mantissa[1:]
-    print(nFinale, str(len(nFinale)) + "bit")
+    print(nFinale, str(len(nFinale)) + "bit", end = " ")
+
+
+    if len(nFinale) != (nCifreExp + nCifreMantissa + 1) :
+        print("OVERFLOW!")
+    else :
+        print("VALID NUMBER.")
 
 
 def main():
