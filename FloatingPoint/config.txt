@@ -1,7 +1,9 @@
-﻿bit		 Sign  Exp   Mantissa
-[1.] 16bit	|  1  |  5  |  10
-[2.] 32bit 	|  1  |	 8  |  23
-[3.] 64bit	|  1  |	 11 |  52
-[4.] 128bit	|  1  |  15 |  112
-[5.] All
-[6.] Manual
+bit;Sign;Exp;Mantissa
+# File di configurazione
+16bit;1;5;10
+32bit;1;8;23
+64bit;1;11;52
+128bit;1;15;112
+# !! Lasciare sempre "All" e "Manual" come ultimo e penultimo !!
+All
+Manual

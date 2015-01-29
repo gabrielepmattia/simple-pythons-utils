@@ -55,7 +55,6 @@ def ieeeConvert(n, nCifreExp, nCifreMantissa) :
 
 
     ## Il numero ora è della forma 10101.01010101
-    print("\n")
     print("## Number converted in binary")
     print(parteInteraBin + "." + parteDecimaleBin)
 
@@ -106,50 +105,93 @@ def ieeeConvert(n, nCifreExp, nCifreMantissa) :
     else :
         print("VALID NUMBER.")
 
+        
+## costruisciConfigurazione
+# @param file File di configurazione
+# @return d Dizionario <voce>:[bit, segno, exp, mantissa]
+#
+def costruisciConfigurazione(file) :
+    d = {}
+    inFile = open(file, "r", encoding = "UTF-8")
+    n = 0
+    
+    for riga in inFile :
+        if riga[0] != "#" :
+            d[n] = riga.strip().split(";")
+            
+            n += 1        
+    
+    inFile.close()
+    return d
 
 def main():
     done = False
+
+    # Costruisco il dizionario di configurazione
+    d = costruisciConfigurazione("config.txt")
     
     while not done :
+
+        # Stampo a video la configurazione per consentire la scelta
+        print("="*15 + " BITMAKER " + "="*15)
+        print("="*2 + " Convert decimal to floating point " + "="*2)
+        print("="*13 + " by gabry3795 " + "="*13)
+        print("="*4 + " University La Sapienza of Rome " + "="*4)
+        print("="*6 + " Computer Engineering 14/15 " + "="*6)
+        for voce in d :
+            if int(voce) == 0 :
+                print("[N.] %7s %7s %7s %7s" %(d[voce][0], d[voce][1], d[voce][2], d[voce][3]))
+            elif int(voce) == (len(d) -1) or int(voce) == (len(d) -2) :
+                print("[%s.] %7s" %(voce, d[voce][0]))
+            else :
+                print("[%s.] %7s %7s %7s %7s" %(voce, d[voce][0], d[voce][1], d[voce][2], d[voce][3]))
         
-        inFile = open("config.txt", "r", encoding = "UTF-8")
-        content = inFile.read()
-        righe = content.split("\n")
+        print("=> Choose the floating point type you want to convert to.")
+        #print("=> (Use default setting or choose manual to specify mantissa and exponent)")
+        scelta  = int(input("=> [1 - %d]: " % (len(d)-1) ))
+        n       = input("=> Insert number to convert (Use DOT! ex. 456.43): ")
         
-        print(content)
-
-        scelta = int(input("Choose: "))
-
-        # Last line always "Manual"
-        if scelta == len(righe) -1 :
-            n               = input("Insert number to convert (Use DOT! ex. 456.43): ")
-            #nCifreSegno    = int(input("Insert number of sign: "))
-            nCifreExp       = int(input("Insert number of exponent: "))
-            nCifreMantissa  = int(input("Insert number of mantissa: "))
-
-            ieeeConvert(n, nCifreExp, nCifreMantissa)
+        # Ultima riga sempre manuale
+        if scelta == len(d) -1 :
             
-        elif scelta == len(righe) -2 :
-            n = input("Insert number to convert (Use DOT! ex. 456.43): ")
+            #sign    = int(input("Insert number of sign: "))
+            sign    = 1 # Non esistono numeri con sign > 1
+            exp     = int(input("==> Insert number of exponent: "))
+            mantissa = int(input("==> Insert number of mantissa: "))
+            bit = str(sign + exp + mantissa) + "bit"
+
+            print("\n" + "="*10 + " %s : Sign (%s) | Exponent (%s) | Mantissa (%s) " % (bit, sign, exp, mantissa) + "="*10)
+            ieeeConvert(n, exp, mantissa)
+
+        # Penultima riga sempre "Tutti"
+        elif scelta == len(d) -2 :
             
-            for i in range(1, len(righe) -2) :
-                riga = righe[i].split("|")
-                ieeeConvert(n, int(riga[2]), int(riga[3]))
-                riga.clear()
-                print("\n", "-"*60)
+            for i in range(1, len(d) -2) :
+                bit         = d[i][0]
+                sign        = d[i][1]
+                exp         = int(d[i][2])
+                mantissa    = int(d[i][3])
+                print("\n" + "="*10 + " %s : Sign (%s) | Exponent (%s) | Mantissa (%s) " % (bit, sign, exp, mantissa) + "="*10)
+                ieeeConvert(n, exp, mantissa)
+
+                #print("\n", "-"*60)
+                
+        # Altrimenti 
         else :
-            riga = righe[scelta].split("|")
+            bit         = d[scelta][0]
+            sign        = d[scelta][1]
+            exp         = int(d[scelta][2])
+            mantissa    = int(d[scelta][3])
 
-            n = input("Insert number to convert (Use DOT! ex. 456.43): ")
-
-            ieeeConvert(n, int(riga[2]), int(riga[3]))
+            print("\n" + "="*10 + " %s : Sign (%s) | Exponent (%s) | Mantissa (%s) " % (bit, sign, exp, mantissa) + "="*10)
+            ieeeConvert(n, exp, mantissa)
         
 
-     
-        inFile.close()
+          
 
 
         #/---------------------/
-        done = input("\n\n||---> Done? ('y' for yes)").lower() == "y"
+        done = input("\n\n==> Done? ('y' for yes): ").lower() == "y"
+        print("\n\n")
 
 main()
